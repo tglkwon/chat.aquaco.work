@@ -1,6 +1,7 @@
 let nowInterval
 let pauseInterval = false
 let nowScrollTimeout
+let nowPolling = false
 
 async function idToMember(id) {
     const token = localStorage.getItem("token")
@@ -36,7 +37,7 @@ async function idToMember(id) {
 
 async function read(token, list, isPrev = false) {
     const myId = JSON.parse(atob(token.split(".")[1])).id
-
+    
     let section = document.querySelector("section")
     for(const item of list) {
         const article = document.createElement("article")
@@ -73,7 +74,7 @@ async function read(token, list, isPrev = false) {
 
             const time = document.createElement("div")
             time.classList.add("time")
-            time.innerText = item.datetime
+            time.innerText = moment.utc(item.datetime).tz('Asia/Seoul').format('HH:mm')
 
             article.append(profile, body, time)
         } else {
@@ -81,7 +82,7 @@ async function read(token, list, isPrev = false) {
             
             const time = document.createElement("div")
             time.classList.add("time")
-            time.innerText = item.datetime
+            time.innerText = item.datetime ? moment.utc(item.datetime).tz('Asia/Seoul').format('HH:mm') : ''
 
             const body = document.createElement("div")
             body.classList.add("body")
@@ -104,6 +105,11 @@ async function read(token, list, isPrev = false) {
 
 async function readComment() {
     try {
+        // console.log(nowPolling)
+        if(nowPolling) return
+
+        nowPolling = true
+
         const token = localStorage.getItem("token")
         const article = document.querySelector("main > section > article:last-child")
         const lastChatId = article.dataset.conmmentNo
@@ -117,19 +123,27 @@ async function readComment() {
         })
 
         const section = document.querySelector("section")
-        const flagIsScrollBottom = section.scrollHeight - section.offsetHeight <= section.scrollTop
-        
+        const flagIsScrollBottom = section.scrollHeight - section.offsetHeight - 10 <= section.scrollTop
+
         const list = res.data.list
         if(res.data.success) {
-            await read(token, list)
-            if(flagIsScrollBottom) {
-                section.scrollTop = section.scrollHeight - section.offsetHeight
+            if(res.data.list.length) {
+                document.querySelectorAll(`article[data-conmment-no="-1"]`).forEach((v) => {
+                    v.remove()
+                })
+                await read(token, list)
+                if(flagIsScrollBottom) {
+                    section.scrollTop = section.scrollHeight - section.offsetHeight
+                }
             }
         } else {
             throw new Error()
         }
+        
+        nowPolling = false
     } catch(e) {
         const err = e.message || e.toString()
+        nowPolling = false
     }
 }
 
@@ -152,7 +166,17 @@ async function writeComment() {
         })
 
         if(res.data) {
-            polling()
+            // polling()
+            const myId = JSON.parse(atob(token.split(".")[1])).id
+            const list = [{ 
+                id: -1,
+                chatter: myId,
+                text: comment
+            }]
+            await read(token, list)
+
+            const section = document.querySelector("section")
+            section.scrollTop = section.scrollHeight - section.offsetHeight
         } else {
             throw new Error()
         }
@@ -239,8 +263,11 @@ async function readPrev() {
         await read(token, list)
         section.scrollTop = section.scrollHeight - section.offsetHeight
 
-        //polling 3초? 5초마다 작동하는 while문 setInterval
-        setInterval(polling, 1000)
+        //polling
+        // setInterval(polling, 1000)
+
+        //long polling
+        setInterval(readComment, 500)
 
     } catch(e) {
         console.error(e)

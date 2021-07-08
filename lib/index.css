@@ -48,6 +48,11 @@ article > div {
     display: table-cell;
 }
 
+article > div.body > div.nickname {
+    width: 10px;
+    white-space: nowrap;
+}
+
 div.profile {
     width: 50px;
 }
