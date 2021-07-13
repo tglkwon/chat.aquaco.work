@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="/lib/login.css">
+    </head>
+    <body>
+        <header>
+            Aquaco's Chat Page
+        </header>
+        <main>
+            <div class="input">
+                <input type="text" placeholder="아이디" onkeydown="if(event.keycode == 13) login()">
+                <input type="password" placeholder="비밀번호" onkeydown="if(event.keycode == 13) login()">
+            </div>
+            <div class="button">
+                <button onclick="login()">로그인</button>
+            </div>
+        </main>
+    </body>
+</html>
