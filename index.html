@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="/lib/index.css">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="script/index.js" async></script>
+    </head>
+    <body>
+        <div id=wrapper>
+            <header>
+                Aquaco's Chat Page
+            </header>
+            <main>
+                <section>
+                </section>
+            </main>
+            <footer>
+                <div class="input">
+                    <input type="text" name="message" onkeydown="if(event.keycode == 13) sendMessage()">
+                </div>
+                <div class="button">
+                    <button onclick="sendMessage()">전송</button>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

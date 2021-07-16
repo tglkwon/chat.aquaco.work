@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="/lib/register.css">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="script/register.js" async></script>
+    </head>
+    <body>
+        <div id=wrapper>
+            <header>
+                Aquaco's Chat Page
+            </header>
+            <main>
+                <div class="input">
+                    <input type="text" name="email" placeholder="이메일">
+                    <input type="password" name="password" placeholder="비밀번호">
+                    <input type="password" name="password2" placeholder="비밀번호">
+                    <input type="text" name="nickname" placeholder="닉네임">
+                    <!-- <input type="text" name="email" placeholder="아이디" onkeydown="if(event.keycode == 13) register()">
+                    <input type="password" name="password" placeholder="비밀번호" onkeydown="if(event.keycode == 13) register()">
+                    <input type="password" name="password2" placeholder="비밀번호" onkeydown="if(event.keycode == 13) register()">
+                    <input type="text" name="nickname" placeholder="비밀번호" onkeydown="if(event.keycode == 13) register()"> -->
+                    <input type="file" name="profileImage" onkeydown="if(event.keycode == 13) register()">
+                </div>
+                <div class="button">
+                    <button onclick="register()">회원가입</button>
+                    <button onclick="location.href='login.html'">로그인</button>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>
