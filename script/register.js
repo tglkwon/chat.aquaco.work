@@ -9,8 +9,14 @@ async function register() {
         const email = inputEmail.value
         const password = inputPassword.value
         const password2 = inputPassword2.value
-        const nickname = inputNickname.value    
-        const profileImage = inputProfileImage.value
+        const nickname = inputNickname.value
+
+        if (!inputProfileImage.files.length) {
+            alert("프로필 이미지가 없습니다.")
+            return
+        }
+
+        const profileImage = inputProfileImage.files[0]
 
         if (password !== password2) {
             alert("두 비밀번호가 다릅니다.")
@@ -35,9 +41,7 @@ async function register() {
         if (!result.success) {
             alert(result.error)
             return
-        }
-
-        const token = localStorage.setItem("token", token)        
+        }     
 
         location.href = "/index.html"
     } catch (error) {
